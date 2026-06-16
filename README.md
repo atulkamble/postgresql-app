@@ -226,45 +226,49 @@ vi app.py
 
 Paste:
 
-```python
-from flask import Flask
+```pythonfrom flask import Flask
 import psycopg2
+import os
 
 app = Flask(__name__)
 
-DB_HOST = "10.0.2.10"
-DB_NAME = "university"
-DB_USER = "atul"
-DB_PASSWORD = "Password@123"
+DB_HOST = os.environ.get("DB_HOST", "database-1-instance-1.c3iuq8u6iyy3.us-east-1.rds.amazonaws.com")
+DB_NAME = os.environ.get("DB_NAME", "university")
+DB_USER = os.environ.get("DB_USER", "atul")
+DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
 
 @app.route('/')
 def home():
+    conn = None
+    try:
+        conn = psycopg2.connect(
+            host=DB_HOST,
+            database=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD
+        )
 
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD
-    )
+        with conn.cursor() as cur:
+            cur.execute("""
+            CREATE TABLE IF NOT EXISTS student(
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(100)
+            );
+            """)
+            conn.commit()
 
-    cur = conn.cursor()
+            cur.execute("SELECT COUNT(*) FROM student;")
+            count = cur.fetchone()[0]
 
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS student(
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100)
-    );
-    """)
+        return f"Connected Successfully! Total Records: {count}"
 
-    conn.commit()
-
-    cur.execute("SELECT COUNT(*) FROM student;")
-    count = cur.fetchone()[0]
-
-    cur.close()
-    conn.close()
-
-    return f"Connected Successfully! Total Records: {count}"
+    except psycopg2.OperationalError as e:
+        return f"Database connection failed: {e}", 500
+    except Exception as e:
+        return f"An error occurred: {e}", 500
+    finally:
+        if conn:
+            conn.close()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)
