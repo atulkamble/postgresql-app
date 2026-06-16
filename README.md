@@ -1,7 +1,5 @@
 # PostgreSQL Application Setup, Administration & Flask Deployment Guide
 
-Based on the PostgreSQL Application Lab. 
-
 ---
 
 # Architecture
