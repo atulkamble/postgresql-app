@@ -16,7 +16,66 @@ DB_NAME = os.environ.get("DB_NAME", "postgres")
 DB_USER = os.environ.get("DB_USER", "atul")
 DB_PASSWORD = os.environ.get("DB_PASSWORD", "Password@123")
 ```
+```
+Postgrsql flexible server 
 
+1. select configurations 
+dev/test
+PostgreSQL and Microsoft Entra authentication
+
+2. create user and set password from Microsoft Entra ID 
+
+demo@atulkamblehotmail.onmicrosoft.com
+
+3. create user and password
+
+Mumu0503
+
+4. powershell run as admin >> choco install postgresql -y
+
+
+git --version 
+git clone https://github.com/atulkamble/postgresql-app.git
+cd postgresql-app
+postgres -V
+
+5. // modify and check connections
+
+export PGHOST=myserver98600.postgres.database.azure.com
+export PGUSER=atul
+export PGPORT=5432
+export PGDATABASE=postgres
+export PGPASSWORD=Password@123
+
+6. connect from terminal
+
+psql "host=myserver98600.postgres.database.azure.com port=5432 dbname=postgres user=atul sslmode=require" -W
+
+7. create database and table
+
+CREATE DATABASE university;
+
+\l
+
+CREATE TABLE student(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+INSERT INTO student(name)
+VALUES
+('Atul'),
+('Ravi'),
+('Amit');
+
+SELECT * FROM student;
+
+
+python --version
+pip --version
+pip install -r requirements.txt 
+python app.py
+```
 ---
 
 # Architecture
