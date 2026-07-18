@@ -1,5 +1,13 @@
 # PostgreSQL Application Setup, Administration & Flask Deployment Guide
 
+# For Azure 
+```
+DB_HOST = os.environ.get("DB_HOST", "myserver98600.postgres.database.azure.com")
+DB_NAME = os.environ.get("DB_NAME", "postgres")
+DB_USER = os.environ.get("DB_USER", "atul")
+DB_PASSWORD = os.environ.get("DB_PASSWORD", "Password@123")
+```
+
 ---
 
 # Architecture
